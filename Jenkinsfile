@@ -10,8 +10,6 @@ pipeline {
         string(name: 'KEYSPACE', defaultValue: 'jenkins_lab', description: 'Keyspace to check')
     }
 
-    environment {
-        // Optional: Add other environment variables here
     }
 
     stages {
