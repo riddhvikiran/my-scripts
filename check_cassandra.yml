@@ -1,0 +1,35 @@
+- name: Cassandra Local Health Check
+  hosts: localhost
+  connection: local
+  vars:
+    cass_user: "{{ cass_user }}"
+    cass_pass: "{{ cass_pass }}"
+    keyspace: "{{ keyspace }}"
+  tasks:
+    - name: Get Cassandra Node Status
+      command: /opt/homebrew/bin/nodetool status
+      register: node_status
+
+    - name: Display Status
+      debug:
+        var: node_status.stdout_lines
+
+    - name: Verify Node is Up and Normal (UN)
+      fail:
+        msg: "Cassandra node is NOT healthy!"
+      when: "'UN' not in node_status.stdout"
+
+    - name: Check if keyspace exists
+      command: >
+        /opt/homebrew/bin/cqlsh
+        -u {{ cass_user }}
+        -p {{ cass_pass }}
+        -e "DESC KEYSPACE {{ keyspace }};"
+      register: keyspace_check
+      ignore_errors: yes
+
+    - name: Report Keyspace Status
+      debug:
+        msg: "Keyspace {{ keyspace }} found!"
+      when: keyspace_check.rc == 0
+
