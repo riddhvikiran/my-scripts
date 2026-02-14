@@ -10,8 +10,6 @@ pipeline {
         string(name: 'KEYSPACE', defaultValue: 'jenkins_lab', description: 'Keyspace to check')
     }
 
-    }
-
     stages {
         stage('Checkout SCM') {
             steps {
@@ -34,22 +32,5 @@ pipeline {
                 echo "Running Ansible playbook: ${params.PLAYBOOK_FILE}"
 
                 // Run playbook using parameters
-                sh """
-                /opt/homebrew/bin/ansible-playbook \
-                  -i localhost, -c local \
-                  ./${params.PLAYBOOK_FILE} \
-                  --extra-vars "cass_user=${params.CASS_USER} cass_pass=${params.CASS_PASS} keyspace=${params.KEYSPACE}"
-                """
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "Pipeline completed successfully!"
-        }
-        failure {
-            echo "Pipeline failed. Check logs for details."
-        }
-    }
+                s
 
