@@ -1,4 +1,4 @@
-name: Terraform
+name: Terraform CI
 
 on:
   push:
@@ -9,13 +9,22 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     steps:
+      # 1. Checkout code
       - uses: actions/checkout@v3
+
+      # 2. Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.6.0
+
+      # 3. Terraform Init (point to terraform-aws folder)
       - name: Terraform Init
+        working-directory: terraform-aws
         run: terraform init
+
+      # 4. Terraform Plan (also point to terraform-aws folder)
       - name: Terraform Plan
+        working-directory: terraform-aws
         run: terraform plan
 
