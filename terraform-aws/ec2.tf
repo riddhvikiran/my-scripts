@@ -1,4 +1,4 @@
-resource "aws_instance" "my_ec2" {
+resource "aws_instance" "my_ec2_test" {
   count         = 3
   ami           = "ami-051d703a3bf4eb335"
   instance_type = "c7i-flex.large"
