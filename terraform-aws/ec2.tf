@@ -12,7 +12,7 @@ resource "aws_instance" "my_ec2_test" {
   )
 
   root_block_device {
-    volume_size = 5
+    volume_size = count.index == 1 ? 20 : 5
     volume_type = "gp3"
   }
 
