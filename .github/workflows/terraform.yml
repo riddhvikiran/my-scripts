@@ -1,6 +1,8 @@
 name: Terraform
 
 on:
+  pull_request:
+    branches: [ main ]
   push:
     branches: [ main ]
 
@@ -15,6 +17,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.6
+
       - name: Set AWS credentials
         run: |
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
@@ -27,6 +30,13 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
+      # 👀 PR = PLAN ONLY
       - name: Terraform Plan
+        if: github.event_name == 'pull_request'
         run: terraform plan
+
+      # 🚀 MERGE = APPLY
+      - name: Terraform Apply
+        if: github.event_name == 'push'
+        run: terraform apply -auto-approve
 
