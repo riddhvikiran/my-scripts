@@ -1,4 +1,4 @@
-resource "aws_instance" "my_ec2_test" {
+resource "aws_instance" "my_ec2" {
   count         = 3
   ami           = "ami-051d703a3bf4eb335"
   instance_type = "c7i-flex.large"
@@ -12,7 +12,7 @@ resource "aws_instance" "my_ec2_test" {
   )
 
   root_block_device {
-    volume_size = 5
+    volume_size = count.index == 1 ? 20 : 5
     volume_type = "gp3"
   }
 
